@@ -6,12 +6,12 @@ Scripts used for resolving tangles in the T2T June 2020 workshop. The commands f
 
 You need to have the following programs compiled and copied to the bin directory:
 
--[GraphAligner](https://github.com/maickrau/GraphAligner)
--[MBG](https://github.com/maickrau/MBG)
--[gimbricate](https://github.com/ekg/gimbricate)
--[seqwish](https://github.com/ekg/seqwish)
--[vg](https://github.com/vgteam/vg)
+- [GraphAligner](https://github.com/maickrau/GraphAligner)
+- [MBG](https://github.com/maickrau/MBG)
+- [gimbricate](https://github.com/ekg/gimbricate)
+- [seqwish](https://github.com/ekg/seqwish)
+- [vg](https://github.com/vgteam/vg)
 
 You also need the following programs in your path:
 
--[mummer4](https://github.com/mummer4/mummer), tested with bioconda version
+- [mummer4](https://github.com/mummer4/mummer), tested with bioconda version
