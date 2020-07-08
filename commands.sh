@@ -2,8 +2,8 @@
 # You should run the commands one block at a time and stop at the manual steps
 # You first need these files:
 # assemblygraph.gfa: An assembly graph for recruiting HiFi reads
-# assemblygraph_contigs.txt: A text file with the node IDs of the tangle you want to solve 
-# assemblygraph_contigs_surroundings.txt: A text file with the node IDs of the tangle you want to solve, and the nodes around the tangle. At least 1 Mbp, ideally the entire component.
+# assemblygraph_contigs.txt: A text file with the node IDs of the tangle you want to solve. One node ID per line.
+# assemblygraph_contigs_surroundings.txt: A text file with the node IDs of the tangle you want to solve, and the nodes around the tangle. At least 1 Mbp, ideally the entire component. One node ID per line.
 # hifi.fa: genome wide HiFi reads
 # ONT.fa: genome wide ONT reads
 
