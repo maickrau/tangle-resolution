@@ -32,7 +32,6 @@ def get_unitig(pos):
 	assert pos[0] not in unitig_mapping
 	unitig_mapping[pos[0]] = (next_unitig, pos[1])
 	unitig = Node()
-	unitig = Node()
 	unitig.nodeid = next_unitig
 	unitig.nodeseq = graph.nodes[pos[0]].nodeseq
 	if not pos[1]: unitig.nodeseq = revcomp(unitig.nodeseq)
@@ -125,7 +124,7 @@ for edge in graph.edges:
 		assert target[0][0] in unitig_mapping
 		topos = unitig_mapping[target[0][0]]
 		if not target[0][1]: topos = reverse(topos)
-		if frompos == topos: continue
+		if frompos == topos and target[0] != edge: continue
 		if frompos not in result.edges: result.edges[frompos] = set()
 		result.edges[frompos].add((topos, target[1]))
 		mapping_edges.append((edge, target[0]))
