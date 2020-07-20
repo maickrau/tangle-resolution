@@ -19,22 +19,41 @@ mummer -maxmatch -l 500 -b -threads 40 contigs_one.fa hifi.fa > mums.txt
 scripts/pick_readnames_with_mums.py < mums.txt > picked_hifi_round2.txt
 cp picked_hifi_round2.txt picked.txt
 scripts/pick_reads_stdin.py < hifi.fa > recruited_hifi_hpc_round2.fa
-
+bin/MBG recruited_hifi_hpc_round2.fa correctiongraph-hpc.gfa 2000 150 1 3
+sed 's/\b0\b/1000001/g' < correctiongraph-hpc.gfa | awk 'NR==1{print "H\tVN:Z:1.0"}{print;}' > correctiongraph-hpc-fix0.gfa
+/usr/bin/time -v bin/gimbricate -g correctiongraph-hpc-fix0.gfa -n -p contigs.paf -f contigs.fasta > correctiongraph.gimbry.gfa 2> stderr_gimbricate.txt
+/usr/bin/time -v bin/seqwish -s contigs.fasta -p contigs.paf -g correctiongraph-seqwished.gfa 2> stderr_seqwish.txt
+scripts/unitigify_assembly.py correctiongraph-seqwished.gfa correctiongraph-seqwished-unitig.gfa /dev/null
+bin/vg view -Fv correctiongraph-seqwished-unitig.gfa | bin/vg mod -n -U 10 - | bin/vg view - > correctiongraph-seqwished-unitig-normal.gfa
+scripts/unitigify_assembly.py correctiongraph-seqwished-unitig-normal.gfa correctiongraph-seqwished-unitig-normal-unitig.gfa /dev/null
+/usr/bin/time -v bin/GraphAligner -g correctiongraph-seqwished-unitig-normal-unitig.gfa -f recruited_hifi_hpc_round2.fa -a alns-hifi-correction.gaf -t 40 --seeds-first-full-rows 64 -b 35 1> stdout_ga_hifi_correction.txt 2> stderr_ga_hifi_correction.txt
+scripts/extract_extended_path.py correctiongraph-seqwished-unitig-normal-unitig.gfa < alns-hifi-correction.gaf > hifi_corrected.fa
 
 #########################################
 #
 # Manual step 1: Pick k-mer size for building the repeat collapsed graph
 #
 # Run these scripts:
-bin/MBG recruited_hifi_hpc_round2.fa graph-hpc-k3000.gfa 3000 150 1 2
-bin/MBG recruited_hifi_hpc_round2.fa graph-hpc-k3500.gfa 3500 150 1 2
-bin/MBG recruited_hifi_hpc_round2.fa graph-hpc-k4000.gfa 4000 150 1 2
-bin/MBG recruited_hifi_hpc_round2.fa graph-hpc-k4500.gfa 4500 150 1 2
-bin/MBG recruited_hifi_hpc_round2.fa graph-hpc-k5000.gfa 5000 150 1 2
-bin/MBG recruited_hifi_hpc_round2.fa graph-hpc-k5500.gfa 5500 150 1 2
-bin/MBG recruited_hifi_hpc_round2.fa graph-hpc-k6000.gfa 6000 150 1 2
-bin/MBG recruited_hifi_hpc_round2.fa graph-hpc-k6500.gfa 6500 150 1 2
-bin/MBG recruited_hifi_hpc_round2.fa graph-hpc-k7000.gfa 7000 150 1 2
+bin/MBG hifi_corrected.fa graph-hpc-k3000.gfa 3000 150 1 3 &
+bin/MBG hifi_corrected.fa graph-hpc-k3500.gfa 3500 150 1 3 &
+bin/MBG hifi_corrected.fa graph-hpc-k4000.gfa 4000 150 1 3 &
+bin/MBG hifi_corrected.fa graph-hpc-k4500.gfa 4500 150 1 3 &
+bin/MBG hifi_corrected.fa graph-hpc-k5000.gfa 5000 150 1 3 &
+bin/MBG hifi_corrected.fa graph-hpc-k5500.gfa 5500 150 1 3 &
+bin/MBG hifi_corrected.fa graph-hpc-k6000.gfa 6000 150 1 3 &
+bin/MBG hifi_corrected.fa graph-hpc-k6500.gfa 6500 150 1 3 &
+bin/MBG hifi_corrected.fa graph-hpc-k7000.gfa 7000 150 1 3 &
+bin/MBG hifi_corrected.fa graph-hpc-k7500.gfa 7500 150 1 3 &
+bin/MBG hifi_corrected.fa graph-hpc-k8000.gfa 8000 150 1 3 &
+bin/MBG hifi_corrected.fa graph-hpc-k8500.gfa 8500 150 1 3 &
+bin/MBG hifi_corrected.fa graph-hpc-k9000.gfa 9000 150 1 3 &
+bin/MBG hifi_corrected.fa graph-hpc-k9500.gfa 9500 150 1 3 &
+bin/MBG hifi_corrected.fa graph-hpc-k10000.gfa 10000 150 1 3 &
+bin/MBG hifi_corrected.fa graph-hpc-k11000.gfa 11000 150 1 3 &
+bin/MBG hifi_corrected.fa graph-hpc-k12000.gfa 12000 150 1 3 &
+bin/MBG hifi_corrected.fa graph-hpc-k13000.gfa 13000 150 1 3 &
+bin/MBG hifi_corrected.fa graph-hpc-k14000.gfa 14000 150 1 3 &
+bin/MBG hifi_corrected.fa graph-hpc-k15000.gfa 15000 150 1 3 &
 #
 # Look at the graphs "graph-hpc-k____.gfa" in bandage.
 # Pick the highest k where the graph is still in one component.
@@ -103,6 +122,7 @@ scripts/remove_connections.py "<533" "<307" < bridging_seq_hifi_filtered.txt > b
 mv bridging_seq_hifi_filtered_tmp.txt bridging_seq_hifi_filtered.txt
 # with the node ids replaced by the false bridge node IDs.
 # Repeat until there are no nodes with extra connections.
+# The "Nodes missing connections" part doesn't matter for now. Those tangles will stay unresolved by HiFi
 #
 #############################
 
