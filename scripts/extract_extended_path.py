@@ -25,10 +25,13 @@ with open(graphfile) as f:
 
 for l in sys.stdin:
 	parts = l.strip().split('\t')
-	if len(parts) < 6: continue
+	if len(parts) < 11: continue
 	readname = parts[0]
 	if parts[2] != "0" or parts[3] != parts[1]:
 		# no partial alignments
+		continue
+	if float(parts[9]) / float(parts[10]) < 0.98:
+		# no identity less than 98%
 		continue
 	seq = ""
 	last_break = 0
