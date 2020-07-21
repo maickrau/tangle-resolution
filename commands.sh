@@ -20,8 +20,7 @@ scripts/pick_readnames_with_mums.py < mums.txt > picked_hifi_round2.txt
 cp picked_hifi_round2.txt picked.txt
 scripts/pick_reads_stdin.py < hifi.fa > recruited_hifi_hpc_round2.fa
 bin/MBG recruited_hifi_hpc_round2.fa correctiongraph-hpc.gfa 2000 150 1 3
-sed 's/\b0\b/1000001/g' < correctiongraph-hpc.gfa | awk 'NR==1{print "H\tVN:Z:1.0"}{print;}' > correctiongraph-hpc-fix0.gfa
-/usr/bin/time -v bin/gimbricate -g correctiongraph-hpc-fix0.gfa -n -p contigs.paf -f contigs.fasta > correctiongraph.gimbry.gfa 2> stderr_gimbricate.txt
+scripts/simple_gimbry.py contigs.paf contigs.fasta < correctiongraph-hpc.gfa
 /usr/bin/time -v bin/seqwish -s contigs.fasta -p contigs.paf -g correctiongraph-seqwished.gfa 2> stderr_seqwish.txt
 scripts/unitigify_assembly.py correctiongraph-seqwished.gfa correctiongraph-seqwished-unitig.gfa /dev/null
 bin/vg view -Fv correctiongraph-seqwished-unitig.gfa | bin/vg mod -n -U 10 - | bin/vg view - > correctiongraph-seqwished-unitig-normal.gfa
@@ -74,8 +73,7 @@ cp graph-hpc-k4000.gfa graph-hpc.gfa
 #
 ########################################
 
-sed 's/\b0\b/1000001/g' < graph-hpc.gfa | awk 'NR==1{print "H\tVN:Z:1.0"}{print;}' > graph-hpc-fix0.gfa
-/usr/bin/time -v bin/gimbricate -g graph-hpc-fix0.gfa -n -p contigs.paf -f contigs.fasta > graph.gimbry.gfa 2> stderr_gimbricate.txt
+scripts/simple_gimbry.py contigs.paf contigs.fasta < graph-hpc.gfa
 /usr/bin/time -v bin/seqwish -s contigs.fasta -p contigs.paf -g graph-seqwished.gfa 2> stderr_seqwish.txt
 scripts/unitigify_assembly.py graph-seqwished.gfa graph-seqwished-unitig.gfa /dev/null
 bin/vg view -Fv graph-seqwished-unitig.gfa | bin/vg mod -n -U 10 - | bin/vg view - > graph-seqwished-unitig-normal.gfa
