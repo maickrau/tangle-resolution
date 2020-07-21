@@ -27,47 +27,70 @@ bin/vg view -Fv correctiongraph-seqwished-unitig.gfa | bin/vg mod -n -U 10 - | b
 scripts/unitigify_assembly.py correctiongraph-seqwished-unitig-normal.gfa correctiongraph-seqwished-unitig-normal-unitig.gfa /dev/null
 /usr/bin/time -v bin/GraphAligner -g correctiongraph-seqwished-unitig-normal-unitig.gfa -f recruited_hifi_hpc_round2.fa -a alns-hifi-correction.gaf -t 40 --seeds-first-full-rows 64 -b 35 1> stdout_ga_hifi_correction.txt 2> stderr_ga_hifi_correction.txt
 scripts/extract_extended_path.py correctiongraph-seqwished-unitig-normal-unitig.gfa < alns-hifi-correction.gaf > hifi_corrected.fa
+bin/MBG hifi_corrected.fa graph-hpc-k3000.gfa 3000 150 1 3
+bin/MBG hifi_corrected.fa graph-hpc-k3500.gfa 3500 150 1 3
+bin/MBG hifi_corrected.fa graph-hpc-k4000.gfa 4000 150 1 3
+bin/MBG hifi_corrected.fa graph-hpc-k4500.gfa 4500 150 1 3
+bin/MBG hifi_corrected.fa graph-hpc-k5000.gfa 5000 150 1 3
+bin/MBG hifi_corrected.fa graph-hpc-k5500.gfa 5500 150 1 3
+bin/MBG hifi_corrected.fa graph-hpc-k6000.gfa 6000 150 1 3
+bin/MBG hifi_corrected.fa graph-hpc-k6500.gfa 6500 150 1 3
+bin/MBG hifi_corrected.fa graph-hpc-k7000.gfa 7000 150 1 3
+bin/MBG hifi_corrected.fa graph-hpc-k7500.gfa 7500 150 1 3
+bin/MBG hifi_corrected.fa graph-hpc-k8000.gfa 8000 150 1 3
+bin/MBG hifi_corrected.fa graph-hpc-k8500.gfa 8500 150 1 3
+bin/MBG hifi_corrected.fa graph-hpc-k9000.gfa 9000 150 1 3
+bin/MBG hifi_corrected.fa graph-hpc-k9500.gfa 9500 150 1 3
+bin/MBG hifi_corrected.fa graph-hpc-k10000.gfa 10000 150 1 3
+bin/MBG hifi_corrected.fa graph-hpc-k10500.gfa 10500 150 1 3
+bin/MBG hifi_corrected.fa graph-hpc-k11000.gfa 11000 150 1 3
+bin/MBG hifi_corrected.fa graph-hpc-k11500.gfa 11500 150 1 3
+bin/MBG hifi_corrected.fa graph-hpc-k12000.gfa 12000 150 1 3
+bin/MBG hifi_corrected.fa graph-hpc-k13000.gfa 13000 150 1 3
+bin/MBG hifi_corrected.fa graph-hpc-k14000.gfa 14000 150 1 3
+bin/MBG hifi_corrected.fa graph-hpc-k15000.gfa 15000 150 1 3
+cat graph-hpc-k*.gfa | grep -P '^S\t' | cut -f 3 | awk '{print ">" NR; print $3;}' > contigs_merged.fa
 
 #########################################
 #
 # Manual step 1: Pick k-mer size for building the repeat collapsed graph
 #
 # Run these scripts:
-bin/MBG hifi_corrected.fa graph-hpc-k3000.gfa 3000 150 1 3 &
-bin/MBG hifi_corrected.fa graph-hpc-k3500.gfa 3500 150 1 3 &
-bin/MBG hifi_corrected.fa graph-hpc-k4000.gfa 4000 150 1 3 &
-bin/MBG hifi_corrected.fa graph-hpc-k4500.gfa 4500 150 1 3 &
-bin/MBG hifi_corrected.fa graph-hpc-k5000.gfa 5000 150 1 3 &
-bin/MBG hifi_corrected.fa graph-hpc-k5500.gfa 5500 150 1 3 &
-bin/MBG hifi_corrected.fa graph-hpc-k6000.gfa 6000 150 1 3 &
-bin/MBG hifi_corrected.fa graph-hpc-k6500.gfa 6500 150 1 3 &
-bin/MBG hifi_corrected.fa graph-hpc-k7000.gfa 7000 150 1 3 &
-bin/MBG hifi_corrected.fa graph-hpc-k7500.gfa 7500 150 1 3 &
-bin/MBG hifi_corrected.fa graph-hpc-k8000.gfa 8000 150 1 3 &
-bin/MBG hifi_corrected.fa graph-hpc-k8500.gfa 8500 150 1 3 &
-bin/MBG hifi_corrected.fa graph-hpc-k9000.gfa 9000 150 1 3 &
-bin/MBG hifi_corrected.fa graph-hpc-k9500.gfa 9500 150 1 3 &
-bin/MBG hifi_corrected.fa graph-hpc-k10000.gfa 10000 150 1 3 &
-bin/MBG hifi_corrected.fa graph-hpc-k11000.gfa 11000 150 1 3 &
-bin/MBG hifi_corrected.fa graph-hpc-k12000.gfa 12000 150 1 3 &
-bin/MBG hifi_corrected.fa graph-hpc-k13000.gfa 13000 150 1 3 &
-bin/MBG hifi_corrected.fa graph-hpc-k14000.gfa 14000 150 1 3 &
-bin/MBG hifi_corrected.fa graph-hpc-k15000.gfa 15000 150 1 3 &
+bin/MBG contigs_merged.fa mergegraph-hpc-k4000.gfa 4000 150 1 1
+bin/MBG contigs_merged.fa mergegraph-hpc-k5000.gfa 5000 150 1 1
+bin/MBG contigs_merged.fa mergegraph-hpc-k6000.gfa 6000 150 1 1
+bin/MBG contigs_merged.fa mergegraph-hpc-k6500.gfa 6500 150 1 1
+bin/MBG contigs_merged.fa mergegraph-hpc-k7000.gfa 7000 150 1 1
+bin/MBG contigs_merged.fa mergegraph-hpc-k7500.gfa 7500 150 1 1
+bin/MBG contigs_merged.fa mergegraph-hpc-k8000.gfa 8000 150 1 1
+bin/MBG contigs_merged.fa mergegraph-hpc-k8500.gfa 8500 150 1 1
+bin/MBG contigs_merged.fa mergegraph-hpc-k9000.gfa 9000 150 1 1
+bin/MBG contigs_merged.fa mergegraph-hpc-k9500.gfa 9500 150 1 1
+bin/MBG contigs_merged.fa mergegraph-hpc-k10000.gfa 10000 150 1 1
+bin/MBG contigs_merged.fa mergegraph-hpc-k10500.gfa 10500 150 1 1
+bin/MBG contigs_merged.fa mergegraph-hpc-k11000.gfa 11000 150 1 1
+bin/MBG contigs_merged.fa mergegraph-hpc-k11500.gfa 11500 150 1 1
+bin/MBG contigs_merged.fa mergegraph-hpc-k12000.gfa 12000 150 1 1
+bin/MBG contigs_merged.fa mergegraph-hpc-k12500.gfa 12500 150 1 1
+bin/MBG contigs_merged.fa mergegraph-hpc-k13000.gfa 13000 150 1 1
+bin/MBG contigs_merged.fa mergegraph-hpc-k13500.gfa 13500 150 1 1
+bin/MBG contigs_merged.fa mergegraph-hpc-k14000.gfa 14000 150 1 1
+bin/MBG contigs_merged.fa mergegraph-hpc-k14500.gfa 14500 150 1 1
+bin/MBG contigs_merged.fa mergegraph-hpc-k15000.gfa 15000 150 1 1
 #
-# Look at the graphs "graph-hpc-k____.gfa" in bandage.
+# Look at the graphs "mergegraph-hpc-k____.gfa" in bandage.
 # The goal is to find the highest k where the graph is still in one component.
 # Also look for "tips pointing at each other" pattern like this:
 #
 #              /            \
 #             /              \
 # -----------   ------------   -------------
-# 2x coverage   1x coverage   2x coverage
 #
 # This happens when one of the unique sequences has missing k-mers in the middle.
 # If that happens, pick a lower k.
 # Pick the highest k where the graph is still fine.
 # Then copy that to graph-hpc.gfa
-cp graph-hpc-k4000.gfa graph-hpc.gfa
+cp mergegraph-hpc-k10000.gfa graph-hpc.gfa
 #
 # You can also run the above scripts with other k values.
 #
