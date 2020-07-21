@@ -56,12 +56,21 @@ bin/MBG hifi_corrected.fa graph-hpc-k14000.gfa 14000 150 1 3 &
 bin/MBG hifi_corrected.fa graph-hpc-k15000.gfa 15000 150 1 3 &
 #
 # Look at the graphs "graph-hpc-k____.gfa" in bandage.
-# Pick the highest k where the graph is still in one component.
+# The goal is to find the highest k where the graph is still in one component.
+# Also look for "tips pointing at each other" pattern like this:
+#
+#              /            \
+#             /              \
+# -----------   ------------   -------------
+# 2x coverage   1x coverage   2x coverage
+#
+# This happens when one of the unique sequences has missing k-mers in the middle.
+# If that happens, pick a lower k.
+# Pick the highest k where the graph is still fine.
 # Then copy that to graph-hpc.gfa
 cp graph-hpc-k4000.gfa graph-hpc.gfa
 #
 # You can also run the above scripts with other k values.
-# The goal is to find the highest k where the graph is still in one component.
 #
 ########################################
 
