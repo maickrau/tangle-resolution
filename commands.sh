@@ -49,7 +49,7 @@ bin/MBG hifi_corrected.fa graph-hpc-k12000.gfa 12000 150 1 3
 bin/MBG hifi_corrected.fa graph-hpc-k13000.gfa 13000 150 1 3
 bin/MBG hifi_corrected.fa graph-hpc-k14000.gfa 14000 150 1 3
 bin/MBG hifi_corrected.fa graph-hpc-k15000.gfa 15000 150 1 3
-cat graph-hpc-k*.gfa | grep -P '^S\t' | cut -f 3 | awk '{print ">" NR; print $3;}' > contigs_merged.fa
+cat graph-hpc-k*.gfa | grep -P '^S\t' | cut -f 3 | awk '{print ">" NR; print $1;}' > contigs_merged.fa
 
 #########################################
 #
