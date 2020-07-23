@@ -15,6 +15,7 @@ You need to have the following programs compiled and copied to the bin directory
 You also need the following programs in your path:
 
 - [mummer4](https://github.com/mummer4/mummer), tested with bioconda version 4.0.0beta2
+- [bcalm2](https://github.com/GATB/bcalm/), tested with bioconda version 2.2.3
 
 Also set permissions for the scripts:
 
