@@ -15,6 +15,7 @@ graph = Graph()
 graph.load(infile)
 graph.remove_nonexistent_edges()
 
+unitig_tips = set() # pointing outwards
 unitig_mapping = {}
 result = Graph()
 next_unitig = 1
@@ -29,7 +30,9 @@ def get_unitig(pos):
 	global result
 	global next_unitig
 	global graph
+	global unitig_tips
 	assert pos[0] not in unitig_mapping
+	unitig_tips.add(reverse(pos))
 	unitig_mapping[pos[0]] = (next_unitig, pos[1])
 	unitig = Node()
 	unitig.nodeid = next_unitig
@@ -47,6 +50,7 @@ def get_unitig(pos):
 		if not pos[1]: add = revcomp(add)
 		add = add[overlap:]
 		unitig.nodeseq += add
+	unitig_tips.add(pos)
 	result.nodes[next_unitig] = unitig
 	next_unitig += 1
 
@@ -55,10 +59,13 @@ def get_circular_unitig(pos):
 	global result
 	global next_unitig
 	global graph
+	global unitig_mapping
 	assert pos[0] not in unitig_mapping
 	start = pos
+	unitig_tips.add(start)
 	assert len(graph.edges[start]) == 1
 	pos = getset(graph.edges[start])[0]
+	unitig_tips.add(reverse(pos))
 	assert pos[0] not in unitig_mapping
 	unitig_mapping[pos[0]] = (next_unitig, pos[1])
 	unitig = Node()
@@ -118,13 +125,14 @@ mapping_edges = []
 
 for edge in graph.edges:
 	assert edge[0] in unitig_mapping
+	if edge not in unitig_tips: continue
 	frompos = unitig_mapping[edge[0]]
 	if not edge[1]: frompos = reverse(frompos)
 	for target in graph.edges[edge]:
+		if reverse(target[0]) not in unitig_tips: continue
 		assert target[0][0] in unitig_mapping
 		topos = unitig_mapping[target[0][0]]
 		if not target[0][1]: topos = reverse(topos)
-		if frompos == topos and target[0] != edge: continue
 		if frompos not in result.edges: result.edges[frompos] = set()
 		result.edges[frompos].add((topos, target[1]))
 		mapping_edges.append((edge, target[0]))
