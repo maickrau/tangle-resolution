@@ -104,10 +104,26 @@ for e in edge_lines:
 		continue
 	assert from_clip + to_clip > overlap
 	missing_length = from_clip + to_clip - overlap
+	assert missing_length > 0
+	if from_clip + to_clip < missing_length:
+		sys.stderr.write(str(fromtip) + " " + str(totip) + " " +str(from_clip) + " " + str(to_clip) + " " + str(overlap) + " " + str(missing_length) + "\n")
+	assert from_clip + to_clip >= missing_length
 	missing_seq = node_seqs[fromtip[0]]
 	if fromtip[1] == "-": missing_seq = revcomp(missing_seq)
-	missing_seq = missing_seq[-from_clip : -from_clip+missing_length]
+	assert from_clip < len(missing_seq)
+	if missing_length <= from_clip:
+		missing_seq = missing_seq[-from_clip : -from_clip+missing_length]
+	else:
+		missing_seq = missing_seq[-from_clip:]
+	still_missing_length = missing_length - len(missing_seq)
+	if still_missing_length > 0:
+		extra_missing_seq = node_seqs[totip[0]]
+		if totip[1] == "+": extra_missing_seq = revcomp(extra_missing_seq)
+		assert to_clip < len(extra_missing_seq)
+		extra_missing_seq = extra_missing_seq[to_clip-still_missing_length : to_clip]
+		missing_seq += extra_missing_seq
 	assert len(missing_seq) > 0
+	assert len(missing_seq) == missing_length
 	fromnode = fromtip
 	tonode = (totip[0], "+" if totip[1] == "-" else "-")
 	new_node_name = "edgeseq_" + fromnode[0] + "_" + ("fw" if fromnode[1] == "+" else "bw") + "_" + tonode[0] + "_" + ("fw" if tonode[1] == "+" else "bw")
