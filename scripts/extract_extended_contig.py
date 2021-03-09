@@ -33,20 +33,26 @@ for filename in sys.argv[1:]:
 	for n in nodeseqs:
 		contig = nodeseqs[n]
 		pos = (n, True)
+		visited = set()
 		while len(edges[pos]) == 1:
 			(pos, overlap) = getone(edges[pos])
 			add = nodeseqs[pos[0]]
 			if not pos[1]: add = revcomp(add)
 			add = add[overlap:]
 			contig += add
+			if pos in visited: break
+			visited.add(pos)
 		bw = ""
 		pos = (n, False)
+		visited = set()
 		while len(edges[pos]) == 1:
 			(pos, overlap) = getone(edges[pos])
 			add = nodeseqs[pos[0]]
 			if not pos[1]: add = revcomp(add)
 			add = add[overlap:]
 			bw += add
+			if pos in visited: break
+			visited.add(pos)
 		contig = revcomp(bw) + contig
 		print(">" + str(next_id))
 		print(contig)
