@@ -1,6 +1,6 @@
 # Tangle resolution
 
-Scripts used for resolving tangles in the T2T June 2020 workshop. The commands for running the tangle resolution are in commands.sh. Note that there are manual steps so you should run the commands by hand. Running commands.sh will not work.
+Scripts used for resolving tangles. The commands for running the tangle resolution are in commands.sh. Note that there are manual steps so you should run the commands by hand. Running commands.sh will not work. The scripts used in the T2T 2020 workshop are in commit ceb29fbf.
 
 ### Installation
 
